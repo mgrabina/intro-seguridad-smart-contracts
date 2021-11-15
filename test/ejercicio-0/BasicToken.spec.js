@@ -16,16 +16,16 @@ describe("Ejercicio 0", function () {
     });
 
     describe("Inicialización", function () {
-        it.skip('La cuenta minter es el deployer', async function () {
-            // COMPLETAR
+        it('La cuenta minter es el deployer', async function () {
+            expect(await this.token.minter()).to.be.eq(deployer.address);
         });
 
         it('El total supply del token es el esperado', async function () {
             expect(await this.token.totalSupply()).to.eq(INITIAL_SUPPLY);
         });
 
-        it.skip('Todo el total supply es asignado al deployer', async function () {
-            // COMPLETAR
+        it('Todo el total supply es asignado al deployer', async function () {
+            expect(await this.token.balanceOf(deployer.address)).to.eq(INITIAL_SUPPLY);
         });
     });
 
@@ -45,12 +45,16 @@ describe("Ejercicio 0", function () {
     });
 
     describe("Minting", function() {
-        it.skip('Un usuario sin permisos no puede mintear tokens', async function () {
-            // COMPLETAR
+        it('Un usuario sin permisos no puede mintear tokens', async function () {
+            await expect(
+                this.token.connect(usuario).mint(usuario.address, 1)
+            ).to.be.reverted
         });
 
-        it.skip('Un usuario con permisos puede mintear tokens', async function () {
-            // COMPLETAR
+        it('Un usuario con permisos puede mintear tokens', async function () {
+            expect(await this.token.balanceOf(usuario.address)).to.be.eq(0);
+            await this.token.connect(deployer).mint(usuario.address, 1);
+            expect(await this.token.balanceOf(usuario.address)).to
         });
     });
 });

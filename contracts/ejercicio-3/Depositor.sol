@@ -17,17 +17,16 @@ contract Depositor is Ownable {
     }
 
     function depositToVault() external payable onlyOwner {
-        // COMPLETAR
-        // La sintaxis para enviar ETH de un contrato a otro podés verla acá https://docs.soliditylang.org/en/v0.8.7/control-structures.html#external-function-calls
+        vault.deposit{value: msg.value}();
     }
 
     function withdrawFromVault() external onlyOwner {
-        // COMPLETAR
+        vault.withdraw();
     }
 
-    // 1. ¿Por qué es necesaria esta función?
-    // 2. ¿Qué pasa si la borramos?
-    // 3. Aún así, ¿es suficiente? ¿No necesitamos lógica adicional?
-    // 4. De ser necesaria, ¿podemos incluir esa lógica acá?
-    receive() external payable {}
+    function withdrawAll() external onlyOwner {
+        payable(owner()).transfer(address(this).balance);
+    }
+
+    receive() external payable {} // Recibe ethers de otros contratos
 }
